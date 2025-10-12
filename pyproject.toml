@@ -1,0 +1,20 @@
+[project]
+name = "financial"
+version = "1.0.0"
+description = "Invoice PDF extractor with GUI - 发票批量解析工具"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "attr>=0.3.2",
+    "dotenv>=0.9.9",
+    "openai>=2.3.0",
+    "openpyxl>=3.1.5",
+    "pandas>=2.3.3",
+    "pdfplumber>=0.11.7",
+    "pyqt6>=6.6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pyinstaller>=6.0.0",
+]
