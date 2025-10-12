@@ -56,14 +56,14 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           cd dist
-          mv 发票解析工具.app invoice-tools.app
+          mv invoice-tools.app invoice-tools.app
           zip -r invoice-tools.zip invoice-tools.app
 
       - name: Package application (Windows)
         if: runner.os == 'Windows'
         run: |
           cd dist
-          Rename-Item -Path "发票解析工具.exe" -NewName "invoice-tools.exe"
+          Rename-Item -Path "invoice-tools.exe" -NewName "invoice-tools.exe"
           Compress-Archive -Path "invoice-tools.exe" -DestinationPath "invoice-tools.zip"
         shell: powershell
 

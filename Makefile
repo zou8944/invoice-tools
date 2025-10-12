@@ -19,7 +19,7 @@ build: clean
 	@echo "Building application..."
 	uv run pyinstaller build.spec
 	@echo "Removing redundant executable..."
-	rm -f dist/发票解析工具
+	rm -f dist/invoice-tools
 	@echo "Build complete! Application is in dist/"
 
 clean:
@@ -32,17 +32,17 @@ clean:
 
 package: build
 	@echo "Packaging application for distribution..."
-	@cd dist && zip -r 发票解析工具.zip 发票解析工具.app
-	@echo "Package created: dist/发票解析工具.zip"
+	@cd dist && zip -r invoice-tools.zip invoice-tools.app
+	@echo "Package created: dist/invoice-tools.zip"
 	@echo ""
 	@echo "分享说明："
-	@echo "1. 将 dist/发票解析工具.zip 发送给其他人"
+	@echo "1. 将 dist/invoice-tools.zip 发送给其他人"
 	@echo "2. 接收者解压后，右键点击应用选择'打开'"
-	@echo "3. 或者运行: xattr -cr 发票解析工具.app"
+	@echo "3. 或者运行: xattr -cr invoice-tools.app"
 
 run:
-	@if [ -d "dist/发票解析工具.app" ]; then \
-		open "dist/发票解析工具.app"; \
+	@if [ -d "dist/invoice-tools.app" ]; then \
+		open "dist/invoice-tools.app"; \
 	else \
 		echo "Application not found. Run 'make build' first."; \
 	fi

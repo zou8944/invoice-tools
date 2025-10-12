@@ -37,7 +37,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='发票解析工具',
+    name='invoice-tools',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -54,7 +54,7 @@ exe = EXE(
 # macOS 专用配置
 app = BUNDLE(
     exe,
-    name='发票解析工具.app',
+    name='invoice-tools.app',
     icon='financial.jpg',  # 设置应用图标
     bundle_identifier='com.invoice.extractor',
     info_plist={

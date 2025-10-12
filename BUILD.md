@@ -53,7 +53,7 @@ pyinstaller build.spec
 # 方式2: 使用命令行参数
 pyinstaller --onefile \
             --windowed \
-            --name="发票解析工具" \
+            --name="invoice-tools" \
             --hidden-import=pdfplumber \
             --hidden-import=pdfminer \
             --hidden-import=PIL \
@@ -64,12 +64,12 @@ pyinstaller --onefile \
 ```
 
 **输出位置:**
-- 使用 spec 文件: `dist/发票解析工具.app`
-- 使用命令行: `dist/发票解析工具.app`
+- 使用 spec 文件: `dist/invoice-tools.app`
+- 使用命令行: `dist/invoice-tools.app`
 
 **运行打包后的应用:**
 ```bash
-open dist/发票解析工具.app
+open dist/invoice-tools.app
 ```
 
 ### Windows 打包
@@ -80,7 +80,7 @@ open dist/发票解析工具.app
 # 使用命令行参数
 pyinstaller --onefile ^
             --windowed ^
-            --name="发票解析工具" ^
+            --name="invoice-tools" ^
             --hidden-import=pdfplumber ^
             --hidden-import=pdfminer ^
             --hidden-import=PIL ^
@@ -90,7 +90,7 @@ pyinstaller --onefile ^
             gui.py
 ```
 
-**输出位置:** `dist/发票解析工具.exe`
+**输出位置:** `dist/invoice-tools.exe`
 
 **注意事项:**
 - Windows Defender 可能会误报，需要添加信任
@@ -104,7 +104,7 @@ pyinstaller --onefile ^
 # 使用命令行参数
 pyinstaller --onefile \
             --windowed \
-            --name="发票解析工具" \
+            --name="invoice-tools" \
             --hidden-import=pdfplumber \
             --hidden-import=pdfminer \
             --hidden-import=PIL \
@@ -114,12 +114,12 @@ pyinstaller --onefile \
             gui.py
 ```
 
-**输出位置:** `dist/发票解析工具`
+**输出位置:** `dist/invoice-tools`
 
 **运行:**
 ```bash
-chmod +x dist/发票解析工具
-./dist/发票解析工具
+chmod +x dist/invoice-tools
+./dist/invoice-tools
 ```
 
 ## 常见问题
@@ -142,7 +142,7 @@ chmod +x dist/发票解析工具
 
 ```bash
 # 移除隔离属性
-xattr -cr dist/发票解析工具.app
+xattr -cr dist/invoice-tools.app
 ```
 
 或在"系统偏好设置 > 安全性与隐私"中允许运行
