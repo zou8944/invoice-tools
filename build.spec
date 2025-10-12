@@ -6,7 +6,10 @@ a = Analysis(
     ['gui.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[
+        ('financial.jpg', '.'),  # 将图标文件打包到应用根目录
+        ('.env', '.'),  # 将环境变量文件打包到应用根目录
+    ],
     hiddenimports=[
         'pdfplumber',
         'pdfminer',
@@ -52,7 +55,7 @@ exe = EXE(
 app = BUNDLE(
     exe,
     name='发票解析工具.app',
-    icon=None,
+    icon='financial.jpg',  # 设置应用图标
     bundle_identifier='com.invoice.extractor',
     info_plist={
         'NSHighResolutionCapable': 'True',

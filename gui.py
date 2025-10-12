@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtWidgets import (
     QApplication,
     QFileDialog,
@@ -67,7 +67,7 @@ class MainWindow(QMainWindow):
 
     def init_ui(self):
         """初始化UI"""
-        self.setWindowTitle("发票解析工具")
+        self.setWindowTitle("阿珍的发票解析工具")
         self.setGeometry(100, 100, 900, 700)
 
         # 中央部件
@@ -79,7 +79,7 @@ class MainWindow(QMainWindow):
         central_widget.setLayout(main_layout)
 
         # 标题
-        title = QLabel("📄 发票批量解析工具")
+        title = QLabel("📄 阿珍的发票解析工具")
         title_font = QFont()
         title_font.setPointSize(18)
         title_font.setBold(True)
@@ -282,6 +282,9 @@ class MainWindow(QMainWindow):
 def main():
     """主函数"""
     app = QApplication(sys.argv)
+    icon_path = Path(__file__).parent / 'financial.jpg'
+    if icon_path.exists():
+        app.setWindowIcon(QIcon(str(icon_path)))
     window = MainWindow()
     window.show()
     sys.exit(app.exec())
