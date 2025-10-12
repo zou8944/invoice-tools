@@ -14,11 +14,11 @@ jobs:
         os: [macos-latest, windows-latest]
         include:
           - os: macos-latest
-            artifact_name: 发票解析工具-macOS
-            asset_path: dist/发票解析工具.zip
+            artifact_name: invoice-tools-macOS
+            asset_path: dist/invoice-tools.zip
           - os: windows-latest
-            artifact_name: 发票解析工具-Windows
-            asset_path: dist/发票解析工具.zip
+            artifact_name: invoice-tools-Windows
+            asset_path: dist/invoice-tools.zip
 
     steps:
       - name: Checkout code
@@ -56,13 +56,15 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           cd dist
-          zip -r 发票解析工具.zip 发票解析工具.app
+          mv 发票解析工具.app invoice-tools.app
+          zip -r invoice-tools.zip invoice-tools.app
 
       - name: Package application (Windows)
         if: runner.os == 'Windows'
         run: |
           cd dist
-          Compress-Archive -Path "发票解析工具.exe" -DestinationPath "发票解析工具.zip"
+          Rename-Item -Path "发票解析工具.exe" -NewName "invoice-tools.exe"
+          Compress-Archive -Path "invoice-tools.exe" -DestinationPath "invoice-tools.zip"
         shell: powershell
 
       - name: Upload artifact
@@ -94,14 +96,14 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            artifacts/发票解析工具-macOS/发票解析工具.zip
-            artifacts/发票解析工具-Windows/发票解析工具.zip
+            artifacts/invoice-tools-macOS/invoice-tools.zip
+            artifacts/invoice-tools-Windows/invoice-tools.zip
           body: |
-            ## 发票解析工具 ${{ github.ref_name }}
+            ## Invoice Tools ${{ github.ref_name }}
 
             ### 下载说明
-            - **macOS**: 下载 `发票解析工具-macOS.zip`，解压后右键点击应用选择"打开"，或运行 `xattr -cr 发票解析工具.app`
-            - **Windows**: 下载 `发票解析工具-Windows.zip`，解压后直接运行
+            - **macOS**: 下载 `invoice-tools-macOS.zip`，解压后右键点击应用选择"打开"，或运行 `xattr -cr invoice-tools.app`
+            - **Windows**: 下载 `invoice-tools-Windows.zip`，解压后直接运行
 
             ### 更新内容
             请查看提交历史了解详细更新内容
