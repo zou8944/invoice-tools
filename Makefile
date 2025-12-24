@@ -13,13 +13,11 @@ install:
 	uv sync --all-extras
 
 dev:
-	uv run python gui.py
+	uv run python excel_renamer.py
 
 build: clean
 	@echo "Building application..."
-	uv run pyinstaller build.spec
-	@echo "Removing redundant executable..."
-	rm -f dist/invoice-tools
+	uv run pyinstaller excel_renamer.spec
 	@echo "Build complete! Application is in dist/"
 
 clean:
@@ -32,17 +30,17 @@ clean:
 
 package: build
 	@echo "Packaging application for distribution..."
-	@cd dist && zip -r invoice-tools.zip invoice-tools.app
-	@echo "Package created: dist/invoice-tools.zip"
+	@cd dist && zip -r "Excel Sheet Renamer.zip" "Excel Sheet Renamer.app"
+	@echo "Package created: dist/Excel Sheet Renamer.zip"
 	@echo ""
 	@echo "分享说明："
-	@echo "1. 将 dist/invoice-tools.zip 发送给其他人"
+	@echo "1. 将 dist/Excel Sheet Renamer.zip 发送给其他人"
 	@echo "2. 接收者解压后，右键点击应用选择'打开'"
-	@echo "3. 或者运行: xattr -cr invoice-tools.app"
+	@echo "3. 或者运行: xattr -cr 'Excel Sheet Renamer.app'"
 
 run:
-	@if [ -d "dist/invoice-tools.app" ]; then \
-		open "dist/invoice-tools.app"; \
+	@if [ -d "dist/Excel Sheet Renamer.app" ]; then \
+		open "dist/Excel Sheet Renamer.app"; \
 	else \
 		echo "Application not found. Run 'make build' first."; \
 	fi

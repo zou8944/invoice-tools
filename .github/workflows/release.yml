@@ -14,11 +14,11 @@ jobs:
         os: [macos-latest, windows-latest]
         include:
           - os: macos-latest
-            artifact_name: invoice-tools-macOS
-            asset_path: dist/invoice-tools.zip
+            artifact_name: excel-renamer-macOS
+            asset_path: dist/Excel Sheet Renamer.zip
           - os: windows-latest
-            artifact_name: invoice-tools-Windows
-            asset_path: dist/invoice-tools.zip
+            artifact_name: excel-renamer-Windows
+            asset_path: dist/Excel Sheet Renamer.zip
 
     steps:
       - name: Checkout code
@@ -41,28 +41,21 @@ jobs:
       - name: Install dependencies
         run: uv sync --all-extras
 
-      - name: Create .env file
-        run: |
-          echo "DEEPSEEK_API_KEY=${{ secrets.DEEPSEEK_API_KEY }}" > .env
-          echo "DEEPSEEK_BASE_URL=${{ secrets.DEEPSEEK_BASE_URL }}" >> .env
-          echo "DEEPSEEK_MODEL=${{ secrets.DEEPSEEK_MODEL }}" >> .env
-        shell: bash
-
       - name: Build application
         run: |
-          uv run pyinstaller build.spec
+          uv run pyinstaller excel_renamer.spec
 
       - name: Package application (macOS)
         if: runner.os == 'macOS'
         run: |
           cd dist
-          zip -r invoice-tools.zip invoice-tools.app
+          zip -r "Excel Sheet Renamer.zip" "Excel Sheet Renamer.app"
 
       - name: Package application (Windows)
         if: runner.os == 'Windows'
         run: |
           cd dist
-          Compress-Archive -Path "invoice-tools.exe" -DestinationPath "invoice-tools.zip"
+          Compress-Archive -Path "Excel Sheet Renamer.exe" -DestinationPath "Excel Sheet Renamer.zip"
         shell: powershell
 
       - name: Upload artifact
@@ -94,14 +87,14 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            artifacts/invoice-tools-macOS/invoice-tools.zip
-            artifacts/invoice-tools-Windows/invoice-tools.zip
+            artifacts/excel-renamer-macOS/Excel Sheet Renamer.zip
+            artifacts/excel-renamer-Windows/Excel Sheet Renamer.zip
           body: |
-            ## Invoice Tools ${{ github.ref_name }}
+            ## Excel Sheet Renamer ${{ github.ref_name }}
 
             ### 下载说明
-            - **macOS**: 下载 `invoice-tools-macOS.zip`，解压后右键点击应用选择"打开"，或运行 `xattr -cr invoice-tools.app`
-            - **Windows**: 下载 `invoice-tools-Windows.zip`，解压后直接运行
+            - **macOS**: 下载 `excel-renamer-macOS.zip`，解压后右键点击应用选择"打开"，或运行 `xattr -cr 'Excel Sheet Renamer.app'`
+            - **Windows**: 下载 `excel-renamer-Windows.zip`，解压后直接运行
 
             ### 更新内容
             请查看提交历史了解详细更新内容
