@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-import tkinter as tk
-from tkinter import filedialog, messagebox, scrolledtext, ttk
-import openpyxl
-from pathlib import Path
 import threading
+import tkinter as tk
+from pathlib import Path
+from tkinter import filedialog, messagebox, scrolledtext, ttk
+
+import openpyxl
 
 
 class ExcelSheetRenamerApp:
@@ -279,11 +280,86 @@ class ExcelSheetRenamerApp:
             wb.save(out)
             self.log(f"✓ 保存: {Path(out).name} (重命名 {renamed} 个)")
 
+            # 拆分 sheet 为单个文件
+            self.log("\n开始拆分 sheet...")
+            split_count = self.split_sheets(wb, path)
+            self.log(f"✓ 拆分完成: 生成 {split_count} 个文件")
+
             return True
 
         except Exception as e:
             self.log(f"✗ 错误: {e}")
             return False
+
+    def split_sheets(self, wb, original_path):
+        """将每个 sheet 拆分成单个 excel 文件"""
+        # 创建输出目录
+        path_obj = Path(original_path)
+        base_name = path_obj.stem  # 不包含扩展名的文件名
+        output_dir = path_obj.parent / base_name
+
+        # 如果目录不存在则创建
+        if not output_dir.exists():
+            output_dir.mkdir(parents=True)
+            self.log(f"  创建目录: {output_dir.name}")
+
+        split_count = 0
+
+        # 遍历所有 sheet
+        for sheet in wb.worksheets:
+            try:
+                # 创建新的工作簿
+                new_wb = openpyxl.Workbook()
+                # 删除默认创建的 sheet
+                new_wb.remove(new_wb.active) # type: ignore
+
+                # 复制当前 sheet
+                new_sheet = new_wb.create_sheet(title=sheet.title)
+
+                # 复制数据
+                for row in sheet.iter_rows():
+                    for cell in row:
+                        new_cell = new_sheet.cell(
+                            row=cell.row,
+                            column=cell.column,
+                            value=cell.value
+                        )
+                        # 复制样式
+                        if cell.has_style:
+                            new_cell.font = cell.font.copy()
+                            new_cell.border = cell.border.copy()
+                            new_cell.fill = cell.fill.copy()
+                            new_cell.number_format = cell.number_format
+                            new_cell.protection = cell.protection.copy()
+                            new_cell.alignment = cell.alignment.copy()
+
+                # 复制列宽
+                for col in sheet.column_dimensions:
+                    if col in sheet.column_dimensions:
+                        new_sheet.column_dimensions[col].width = sheet.column_dimensions[col].width
+
+                # 复制行高
+                for row in sheet.row_dimensions:
+                    if row in sheet.row_dimensions:
+                        new_sheet.row_dimensions[row].height = sheet.row_dimensions[row].height
+
+                # 复制合并单元格
+                for merged_cell in sheet.merged_cells:
+                    new_sheet.merge_cells(str(merged_cell))
+
+                # 使用 sheet 名称作为文件名
+                file_name = f"{sheet.title}.xlsx"
+                output_path = output_dir / file_name
+
+                # 保存文件
+                new_wb.save(output_path)
+                self.log(f"  ✓ 生成: {file_name}")
+                split_count += 1
+
+            except Exception as e:
+                self.log(f"  ✗ 拆分 {sheet.title} 失败: {e}")
+
+        return split_count
 
     def process_thread(self):
         total = len(self.selected_files)
