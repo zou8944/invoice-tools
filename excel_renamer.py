@@ -305,50 +305,24 @@ class ExcelSheetRenamerApp:
 
         split_count = 0
 
-        # 遍历所有 sheet
-        for sheet in wb.worksheets:
+        # 获取所有 sheet 名称
+        sheet_names = [sheet.title for sheet in wb.worksheets]
+
+        # 对每个 sheet 创建单独的文件
+        for sheet_name in sheet_names:
             try:
-                # 创建新的工作簿
-                new_wb = openpyxl.Workbook()
-                # 删除默认创建的 sheet
-                new_wb.remove(new_wb.active) # type: ignore
+                # 重新加载原始文件（保留所有原始格式）
+                new_wb = openpyxl.load_workbook(
+                    original_path.replace('.xlsx', '_renamed.xlsx')
+                )
 
-                # 复制当前 sheet
-                new_sheet = new_wb.create_sheet(title=sheet.title)
-
-                # 复制数据
-                for row in sheet.iter_rows():
-                    for cell in row:
-                        new_cell = new_sheet.cell(
-                            row=cell.row,
-                            column=cell.column,
-                            value=cell.value
-                        )
-                        # 复制样式
-                        if cell.has_style:
-                            new_cell.font = cell.font.copy()
-                            new_cell.border = cell.border.copy()
-                            new_cell.fill = cell.fill.copy()
-                            new_cell.number_format = cell.number_format
-                            new_cell.protection = cell.protection.copy()
-                            new_cell.alignment = cell.alignment.copy()
-
-                # 复制列宽
-                for col in sheet.column_dimensions:
-                    if col in sheet.column_dimensions:
-                        new_sheet.column_dimensions[col].width = sheet.column_dimensions[col].width
-
-                # 复制行高
-                for row in sheet.row_dimensions:
-                    if row in sheet.row_dimensions:
-                        new_sheet.row_dimensions[row].height = sheet.row_dimensions[row].height
-
-                # 复制合并单元格
-                for merged_cell in sheet.merged_cells:
-                    new_sheet.merge_cells(str(merged_cell))
+                # 删除除当前 sheet 外的所有 sheet
+                sheets_to_remove = [s for s in new_wb.sheetnames if s != sheet_name]
+                for s in sheets_to_remove:
+                    new_wb.remove(new_wb[s])
 
                 # 使用 sheet 名称作为文件名
-                file_name = f"{sheet.title}.xlsx"
+                file_name = f"{sheet_name}.xlsx"
                 output_path = output_dir / file_name
 
                 # 保存文件
@@ -357,7 +331,7 @@ class ExcelSheetRenamerApp:
                 split_count += 1
 
             except Exception as e:
-                self.log(f"  ✗ 拆分 {sheet.title} 失败: {e}")
+                self.log(f"  ✗ 拆分 {sheet_name} 失败: {e}")
 
         return split_count
 
